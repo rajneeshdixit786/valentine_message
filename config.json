@@ -1,15 +1,27 @@
 {
     "name": "My Love",
     "loveEmoji": "💖",
-    "headerText": "💖 Kuchku 💖",
     "mainQuestion": "Will you be my Valentine?",
     "yesButton": "Yes! 💖",
     "noButton": "No 🙅‍♀️",
+    "yesButtonMessages": [
+        "Yes! 💖",
+        "Wait... really? 😳",
+        "Are you sure? 🤔",
+        "Think carefully! 💭",
+        "No pressure! 😅",
+        "Final answer? 🎯",
+        "You mean it? 🥺",
+        "Promise? 💕"
+    ],
     "noButtonMessages": [
         "Are you sure?",
         "Really sure?",
-        "Think again!",
-        "Last chance!",
-        "Is that your final answer?"
+        "Think again! 🤔",
+        "Pretty please? 🥺",
+        "Last chance! ⏰",
+        "Don't be shy! 😊",
+        "Come on! 💕",
+        "You know you want to! 😉"
     ]
 }

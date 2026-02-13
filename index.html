@@ -295,9 +295,26 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
+        .btn.primary {
+            animation: yesButtonPulse 2s ease-in-out infinite;
+        }
+
         .btn.primary:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 15px 35px rgba(245, 87, 108, 0.6);
+            transform: translateY(-5px) scale(1.2);
+            box-shadow: 0 15px 35px rgba(245, 87, 108, 0.8);
+            animation: yesButtonPulse 0.8s ease-in-out infinite;
+        }
+
+        @keyframes yesButtonPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
         }
 
         /* Runaway / Moving Button Styles */
@@ -609,11 +626,20 @@
 
             optEl.innerHTML = '';
 
-            // Yes Button
+            // Yes Button - Make it playful like No button
             const yesBtn = document.createElement('button');
             yesBtn.className = 'btn primary';
             yesBtn.innerText = config.yesButton;
-            yesBtn.onclick = handleYes;
+            yesBtn.id = 'yesBtn';
+
+            // Handle both click and touchstart for responsiveness
+            const yesAction = (e) => {
+                e.preventDefault();
+                handleYes();
+            };
+
+            yesBtn.addEventListener('click', yesAction);
+            yesBtn.addEventListener('touchstart', yesAction);
             optEl.appendChild(yesBtn);
 
             // No Button
@@ -666,9 +692,12 @@
         function handleNo() {
             const noBtn = document.getElementById('noBtn');
 
-            // After 5 clicks, treat it as a "Yes!" 
+            // After 5 clicks, show a playful "you win" message
             if (noClickCount >= 5) {
-                handleYes();
+                noBtn.style.display = 'none';
+                titleEl.innerHTML = `<span class="heart-icon">😅</span> <span class="title-text">Okay, Okay!</span> <span class="heart-icon">😅</span>`;
+                textEl.textContent = "You're really determined! I respect that 😄";
+                optEl.innerHTML = '<p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">Maybe next time? 💕</p>';
                 return;
             }
 
@@ -766,15 +795,108 @@
             }
         }
 
+        let yesClickCount = 0;
+
         function handleYes() {
+            const yesBtn = document.getElementById('yesBtn');
             const noBtn = document.getElementById('noBtn');
-            if (noBtn) noBtn.style.display = 'none';
 
-            titleEl.textContent = "Yay! 🥰";
-            textEl.textContent = "I knew you would say yes! ❤️";
-            optEl.innerHTML = ''; // Clear buttons
+            // After 5 clicks, show success!
+            if (yesClickCount >= 5) {
+                if (yesBtn) yesBtn.style.display = 'none';
+                if (noBtn) noBtn.style.display = 'none';
 
-            startConfetti();
+                titleEl.textContent = "Yay! 🥰";
+                textEl.textContent = "I knew you would say yes! ❤️";
+                optEl.innerHTML = ''; // Clear buttons
+
+                startConfetti();
+                return;
+            }
+
+            // 1. Cycle Text (playful messages from config)
+            const yesMessages = config.yesButtonMessages || ["Yes!", "Really?", "Are you sure?", "Think again!", "Last chance!"];
+            const nextIndex = yesClickCount % yesMessages.length;
+            yesBtn.innerText = yesMessages[nextIndex];
+            yesClickCount++;
+
+            // 2. Make it moving & Reparent to Body
+            if (yesBtn.parentNode !== document.body) {
+                const rect = yesBtn.getBoundingClientRect();
+                document.body.appendChild(yesBtn);
+                yesBtn.style.position = 'fixed';
+                yesBtn.style.left = rect.left + 'px';
+                yesBtn.style.top = rect.top + 'px';
+                yesBtn.classList.add('moving');
+            }
+
+            // --- Viewport-Safe Random Positions ---
+            const safeW = window.innerWidth - 100;
+            const safeH = window.innerHeight - 60;
+
+            const randomX = Math.max(20, Math.random() * safeW);
+            const randomY = Math.max(20, Math.random() * safeH);
+
+            yesBtn.style.left = randomX + 'px';
+            yesBtn.style.top = randomY + 'px';
+
+            // --- Apply same theme system as No button ---
+            const themes = [
+                {
+                    bg: "linear-gradient(135deg, #1a0510 0%, #4a001a 100%)",
+                    card: "rgba(255, 255, 255, 0.08)",
+                    btn: "linear-gradient(135deg, #ff6b9d, #f5576c)",
+                    shadow: "rgba(245, 87, 108, 0.4)"
+                },
+                {
+                    bg: "linear-gradient(135deg, #1b0024 0%, #3e0052 100%)",
+                    card: "rgba(255, 255, 255, 0.05)",
+                    btn: "linear-gradient(135deg, #a18cd1, #fbc2eb)",
+                    shadow: "rgba(161, 140, 209, 0.3)"
+                },
+                {
+                    bg: "linear-gradient(135deg, #4a0000 0%, #1a0000 100%)",
+                    card: "rgba(255, 255, 255, 0.1)",
+                    btn: "linear-gradient(135deg, #ff0844, #ffb199)",
+                    shadow: "rgba(255, 8, 68, 0.4)"
+                },
+                {
+                    bg: "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)",
+                    card: "rgba(255, 255, 255, 0.05)",
+                    btn: "linear-gradient(135deg, #00c6ff, #0072ff)",
+                    shadow: "rgba(0, 114, 255, 0.4)",
+                    darkText: false
+                }
+            ];
+
+            // Random theme
+            const theme = themes[Math.floor(Math.random() * themes.length)];
+
+            // Apply Theme
+            document.body.style.background = theme.bg;
+            card.style.background = theme.card;
+            yesBtn.style.background = theme.btn;
+            yesBtn.style.boxShadow = `0 10px 25px ${theme.shadow}`;
+
+            const titleTextSpan = document.querySelector('.title-text');
+
+            if (theme.darkText) {
+                card.style.color = "#2d0a1e";
+                if (titleTextSpan) {
+                    titleTextSpan.style.background = "none";
+                    titleTextSpan.style.webkitTextFillColor = "#2d0a1e";
+                    titleTextSpan.style.color = "#2d0a1e";
+                }
+            } else {
+                card.style.color = "white";
+                if (titleTextSpan) {
+                    titleTextSpan.style.background = "linear-gradient(135deg, #fff, #ffb3d1)";
+                    titleTextSpan.style.webkitBackgroundClip = "text";
+                    titleTextSpan.style.backgroundClip = "text";
+                    titleTextSpan.style.color = "transparent";
+                    titleTextSpan.style.webkitTextFillColor = "transparent";
+                }
+            }
         }
 
         // --- Confetti ---
