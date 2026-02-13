@@ -600,14 +600,13 @@
 
             // --- Dynamic URL Parameters Override ---
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('Name')) {
-                let name = urlParams.get('Name');
-                // Capitalize first letter
-                config.name = name.charAt(0).toUpperCase() + name.slice(1);
+            // Accept both lowercase and uppercase parameter names
+            if (urlParams.has('Name') || urlParams.has('name')) {
+                config.name = urlParams.get('Name') || urlParams.get('name');
             }
             // Allow other overrides if needed
-            if (urlParams.has('Question')) {
-                config.mainQuestion = urlParams.get('Question');
+            if (urlParams.has('Question') || urlParams.has('question')) {
+                config.mainQuestion = urlParams.get('Question') || urlParams.get('question');
             }
 
             // Always update card immediately
