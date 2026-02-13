@@ -125,39 +125,40 @@
                 width: 580px;
                 max-width: none;
                 /* Shift content up to avoid the narrow bottom tip of the heart */
-                padding-bottom: 6rem !important;
-                padding-top: 2rem !important;
+                padding-bottom: 3rem !important;
+                padding-top: 1.5rem !important;
             }
 
-            /* Adjust text sizes */
+            /* Adjust text sizes - increased for readability */
             h1 {
-                font-size: 3rem !important;
-                margin-top: -1rem;
+                font-size: 1.8rem !important;
+                margin-top: -0.5rem;
                 margin-bottom: 0.2rem;
             }
 
             p {
-                font-size: 1.2rem !important;
-                margin-bottom: 1rem;
+                font-size: 0.9rem !important;
+                margin-bottom: 0.6rem;
             }
 
             .options {
-                gap: 12px;
+                gap: 8px;
                 /* Tighter gap */
                 flex-direction: row;
             }
 
             .btn {
-                /* Reduced but still touch-friendly scaling */
-                padding: 18px 36px !important;
-                font-size: 1.2rem !important;
-                border-radius: 50px;
-                min-width: 110px;
+                /* Increased for readability */
+                padding: 8px 16px !important;
+                font-size: 0.9rem !important;
+                border-radius: 25px;
+                min-width: 70px;
             }
 
             .btn.primary {
-                padding: 20px 40px !important;
-                font-size: 1.3rem !important;
+                /* Increased for readability */
+                padding: 10px 20px !important;
+                font-size: 1.0rem !important;
             }
 
             /* Moving button needs to be small when detached, handled below in .moving rule */
@@ -238,14 +239,7 @@
         }
 
         @media (max-width: 500px) {
-            h1 {
-                font-size: 3rem;
-                margin-top: -2rem;
-            }
-
-            .card {
-                padding: 3rem 1.5rem;
-            }
+            /* Defer to 600px rules for consistency */
         }
 
         p {
@@ -326,46 +320,7 @@
             transform: none !important;
         }
 
-        /* Mobile-specific button optimizations */
-        @media (max-width: 600px) {
-
-            /* 
-               Since the card is scaled by 0.55, we need to use VERY LARGE values 
-               here to make them look normal on screen.
-               Target visual height: ~44px. 
-               Math: 44 / 0.55 = 80px height roughly.
-            */
-            .options {
-                gap: 25px;
-                /* Visual gap ~14px */
-                flex-direction: row;
-            }
-
-            .btn {
-                /* Visual padding ~13px 25px */
-                padding: 24px 46px !important;
-                /* Visual font ~16px */
-                font-size: 1.6rem !important;
-                border-radius: 50px;
-                min-width: 140px;
-                /* Ensure wide enough touch area */
-            }
-
-            .btn.primary {
-                /* Make Yes button slightly more prominent */
-                padding: 26px 50px !important;
-                font-size: 1.7rem !important;
-            }
-
-            .btn.moving {
-                /* The moving button is reparented to BODY, so it's no longer scaled by 0.55! */
-                /* Reset to normal, readable size (1:1 scale) */
-                padding: 12px 24px !important;
-                font-size: 1rem !important;
-                min-width: 100px;
-                cursor: pointer;
-            }
-        }
+        /* Mobile-specific button optimizations - REMOVED DUPLICATE */
 
         #confetti {
             position: absolute;
@@ -706,9 +661,16 @@
         scaleCard();
 
         let lastPosIndex = -1;
+        let lastThemeIndex = -1;
 
         function handleNo() {
             const noBtn = document.getElementById('noBtn');
+
+            // After 5 clicks, treat it as a "Yes!" 
+            if (noClickCount >= 5) {
+                handleYes();
+                return;
+            }
 
             // 1. Cycle Text
             const messages = config.noButtonMessages || ["Are you sure?"];
@@ -737,12 +699,6 @@
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
 
-            // 3. PREMIUM THEME SYSTEM (Random)
-            // ... existing theme logic ...
-
-
-            // Debug logging to track positions
-            console.log(`🎯 No button moved to: top=${pos.top}, left=${pos.left}, index=${newIndex}, screen=${isMobile ? 'mobile' : 'desktop'}`);
 
             // --- 3. PREMIUM THEME SYSTEM ---
             const themes = [
@@ -773,7 +729,14 @@
                 }
             ];
 
-            const theme = themes[Math.floor(Math.random() * themes.length)];
+            // Ensure distinct theme
+            let newThemeIndex;
+            do {
+                newThemeIndex = Math.floor(Math.random() * themes.length);
+            } while (newThemeIndex === lastThemeIndex && themes.length > 1);
+
+            lastThemeIndex = newThemeIndex;
+            const theme = themes[newThemeIndex];
 
             // Apply Theme with transitions
             document.body.style.background = theme.bg;
