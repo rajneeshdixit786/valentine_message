@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For You 💖</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Modern Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1a0510 0%, #2d0a1e 100%);
+            height: 100vh;
+            height: 100dvh;
+            width: 100%;
+            overflow: hidden;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+            transition: background 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Animated Background */
+        .blobs {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: moveBlob 15s infinite alternate;
+        }
+
+        .blob:nth-child(1) {
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, #800040, #4a0020);
+        }
+
+        .blob:nth-child(2) {
+            bottom: -10%;
+            right: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, #4a0000, #2b0000);
+            animation-delay: -7s;
+        }
+
+        .blob:nth-child(3) {
+            top: 50%;
+            left: 50%;
+            width: 30vw;
+            height: 30vw;
+            background: radial-gradient(circle, #5e0035, #3d0020);
+            animation-delay: -3s;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes moveBlob {
+            0% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+
+            50% {
+                transform: translate(100px, -80px) scale(1.1) rotate(90deg);
+            }
+
+            100% {
+                transform: translate(-80px, 100px) scale(0.9) rotate(180deg);
+            }
+        }
+
+        /* Heart Card 3.0 */
+        .card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            width: 95%;
+            max-width: 580px;
+            aspect-ratio: 1/1;
+            padding: 3rem 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            clip-path: path('M290,120 C290,120 250,20 160,20 C70,20 0,95 0,185 C0,275 140,335 290,520 C440,335 580,275 580,185 C580,95 510,20 420,20 C330,20 290,120 290,120 Z');
+            border: none;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.3);
+            animation: cardEntrance 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                /* JS handles scaling now. */
+                width: 580px;
+                max-width: none;
+                /* Shift content up to avoid the narrow bottom tip of the heart */
+                padding-bottom: 6rem !important;
+                padding-top: 2rem !important;
+            }
+
+            /* Adjust text sizes */
+            h1 {
+                font-size: 3rem !important;
+                margin-top: -1rem;
+                margin-bottom: 0.2rem;
+            }
+
+            p {
+                font-size: 1.2rem !important;
+                margin-bottom: 1rem;
+            }
+
+            .options {
+                gap: 12px;
+                /* Tighter gap */
+                flex-direction: row;
+            }
+
+            .btn {
+                /* Reduced but still touch-friendly scaling */
+                padding: 18px 36px !important;
+                font-size: 1.2rem !important;
+                border-radius: 50px;
+                min-width: 110px;
+            }
+
+            .btn.primary {
+                padding: 20px 40px !important;
+                font-size: 1.3rem !important;
+            }
+
+            /* Moving button needs to be small when detached, handled below in .moving rule */
+        }
+
+        @keyframes cardEntrance {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -40%) scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.8rem;
+            margin-bottom: 0.3rem;
+            margin-top: -3rem;
+            font-weight: 400;
+            line-height: 1.1;
+            /* Flex layout for alignment */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            white-space: nowrap;
+        }
+
+        /* Gradient text only for the name */
+        .title-text {
+            background: linear-gradient(135deg, #fff, #ffb3d1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            /* Essential for some browsers */
+            display: inline-block;
+            /* Helps limit the background area */
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
+            /* Ensure no background color bleeds */
+            background-color: transparent;
+        }
+
+        /* Heart icons styling - Full color & Animated */
+        .heart-icon {
+            font-size: 0.8em;
+            filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.6));
+            animation: heartBeat 1.5s infinite ease-in-out;
+            transform-origin: center;
+        }
+
+        @keyframes heartBeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            15% {
+                transform: scale(1.15);
+            }
+
+            30% {
+                transform: scale(1);
+            }
+
+            45% {
+                transform: scale(1.15);
+            }
+
+            60% {
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 3rem;
+                margin-top: -2rem;
+            }
+
+            .card {
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        p {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        /* Options Container */
+        .options {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            position: relative;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            user-select: none;
+            -webkit-user-select: none;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn.primary {
+            background: linear-gradient(135deg, #ff6b9d, #f5576c);
+            border: none;
+            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.4);
+            padding: 18px 40px;
+            font-size: 1.1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn.primary:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(245, 87, 108, 0.6);
+        }
+
+        /* Runaway / Moving Button Styles */
+        .btn.moving {
+            position: fixed;
+            z-index: 9999;
+            text-transform: none;
+            letter-spacing: 0;
+            padding: 12px 24px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.15);
+            transition: top 0.4s cubic-bezier(0.25, 1, 0.5, 1), left 0.4s cubic-bezier(0.25, 1, 0.5, 1), background 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Disable hover/active transforms on moving button to prevent it going off-screen */
+        .btn.moving:hover,
+        .btn.moving:active {
+            transform: none !important;
+        }
+
+        /* Mobile-specific button optimizations */
+        @media (max-width: 600px) {
+
+            /* 
+               Since the card is scaled by 0.55, we need to use VERY LARGE values 
+               here to make them look normal on screen.
+               Target visual height: ~44px. 
+               Math: 44 / 0.55 = 80px height roughly.
+            */
+            .options {
+                gap: 25px;
+                /* Visual gap ~14px */
+                flex-direction: row;
+            }
+
+            .btn {
+                /* Visual padding ~13px 25px */
+                padding: 24px 46px !important;
+                /* Visual font ~16px */
+                font-size: 1.6rem !important;
+                border-radius: 50px;
+                min-width: 140px;
+                /* Ensure wide enough touch area */
+            }
+
+            .btn.primary {
+                /* Make Yes button slightly more prominent */
+                padding: 26px 50px !important;
+                font-size: 1.7rem !important;
+            }
+
+            .btn.moving {
+                /* The moving button is reparented to BODY, so it's no longer scaled by 0.55! */
+                /* Reset to normal, readable size (1:1 scale) */
+                padding: 12px 24px !important;
+                font-size: 1rem !important;
+                min-width: 100px;
+                cursor: pointer;
+            }
+        }
+
+        #confetti {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Floating Hearts */
+        .floating-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0;
+            animation: floatHeart 10s ease-in infinite;
+            filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.6));
+        }
+
+        .heart:nth-child(1) {
+            left: 10%;
+            animation-delay: 0s;
+            font-size: 20px;
+        }
+
+        .heart:nth-child(2) {
+            left: 25%;
+            animation-delay: 2s;
+            font-size: 28px;
+        }
+
+        .heart:nth-child(3) {
+            left: 40%;
+            animation-delay: 4s;
+            font-size: 22px;
+        }
+
+        .heart:nth-child(4) {
+            left: 60%;
+            animation-delay: 1s;
+            font-size: 26px;
+        }
+
+        .heart:nth-child(5) {
+            left: 75%;
+            animation-delay: 3s;
+            font-size: 24px;
+        }
+
+        .heart:nth-child(6) {
+            left: 90%;
+            animation-delay: 5s;
+            font-size: 20px;
+        }
+
+        .heart:nth-child(7) {
+            left: 15%;
+            animation-delay: 6s;
+            font-size: 30px;
+        }
+
+        .heart:nth-child(8) {
+            left: 50%;
+            animation-delay: 7s;
+            font-size: 22px;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                bottom: -10%;
+                opacity: 0;
+                transform: translateX(0) rotate(0deg) scale(0.8);
+            }
+
+            15% {
+                opacity: 0.8;
+            }
+
+            85% {
+                opacity: 0.4;
+            }
+
+            100% {
+                bottom: 110%;
+                opacity: 0;
+                transform: translateX(30px) rotate(360deg) scale(1.2);
+            }
+        }
+
+        /* Sparkles */
+        .sparkles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 3s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .sparkle:nth-child(1) {
+            top: 20%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+
+        .sparkle:nth-child(2) {
+            top: 40%;
+            left: 80%;
+            animation-delay: 0.5s;
+        }
+
+        .sparkle:nth-child(3) {
+            top: 60%;
+            left: 25%;
+            animation-delay: 1s;
+        }
+
+        .sparkle:nth-child(4) {
+            top: 30%;
+            left: 70%;
+            animation-delay: 1.5s;
+        }
+
+        .sparkle:nth-child(5) {
+            top: 70%;
+            left: 50%;
+            animation-delay: 2s;
+        }
+
+        .sparkle:nth-child(6) {
+            top: 15%;
+            left: 45%;
+            animation-delay: 2.5s;
+        }
+
+        .sparkle:nth-child(7) {
+            top: 80%;
+            left: 85%;
+            animation-delay: 0.8s;
+        }
+
+        .sparkle:nth-child(8) {
+            top: 50%;
+            left: 10%;
+            animation-delay: 1.8s;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.5);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="blobs">
+        <div class="blob"></div>
+        <div class="blob"></div>
+        <div class="blob"></div>
+    </div>
+
+    <div class="floating-hearts">
+        <div class="heart">💕</div>
+        <div class="heart">💖</div>
+        <div class="heart">💗</div>
+        <div class="heart">💓</div>
+        <div class="heart">💕</div>
+        <div class="heart">💖</div>
+        <div class="heart">💝</div>
+        <div class="heart">💗</div>
+    </div>
+
+    <div class="sparkles">
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+    </div>
+
+    <!-- Main Card -->
+    <div class="card" id="mainCard">
+        <h1 id="questionTitle">Loading...</h1>
+        <p id="questionText"></p>
+        <div class="options" id="optContainer">
+            <!-- Buttons will be injected here -->
+        </div>
+    </div>
+
+    <canvas id="confetti"></canvas>
+
+    <script>
+        // Global Config
+        let config = {};
+        let noClickCount = 0;
+
+        // Elements
+        const card = document.getElementById('mainCard');
+        const titleEl = document.getElementById('questionTitle');
+        const textEl = document.getElementById('questionText');
+        const optEl = document.getElementById('optContainer');
+
+        // Load Config on Startup
+        async function loadConfig() {
+            try {
+                const response = await fetch('config.json');
+                config = await response.json();
+            } catch (e) {
+                console.error("Could not load config.json", e);
+                // Fallback
+                config = {
+                    name: "Love",
+                    loveEmoji: "💖",
+                    headerText: "💖 Love 💖",
+                    mainQuestion: "Will you be my Valentine?",
+                    yesButton: "Yes",
+                    noButton: "No",
+                    noButtonMessages: ["No?"]
+                };
+            }
+
+            // --- Dynamic URL Parameters Override ---
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('name')) {
+                config.name = urlParams.get('name');
+            }
+            // Allow other overrides if needed
+            if (urlParams.has('question')) {
+                config.mainQuestion = urlParams.get('question');
+            }
+
+            // Always update card immediately
+            updateCard();
+        }
+
+        function updateCard() {
+            // Clean up any roaming noBtn
+            const existingNoBtn = document.getElementById('noBtn');
+            if (existingNoBtn) existingNoBtn.remove();
+
+            // Render structured title with hearts and text separated
+            const emoji = config.loveEmoji || '💖';
+            const name = config.name || 'Love';
+            titleEl.innerHTML = `<span class="heart-icon">${emoji}</span> <span class="title-text">${name}</span> <span class="heart-icon">${emoji}</span>`;
+
+            textEl.textContent = config.mainQuestion;
+
+            optEl.innerHTML = '';
+
+            // Yes Button
+            const yesBtn = document.createElement('button');
+            yesBtn.className = 'btn primary';
+            yesBtn.innerText = config.yesButton;
+            yesBtn.onclick = handleYes;
+            optEl.appendChild(yesBtn);
+
+            // No Button
+            const noBtn = document.createElement('button');
+            noBtn.className = 'btn';
+            noBtn.innerText = config.noButton;
+            noBtn.id = 'noBtn';
+
+            // Handle both click and touchstart for responsiveness
+            const moveAction = (e) => {
+                // Prevent default validation or zooming if necessary, though usually fine
+                // e.preventDefault(); 
+                handleNo();
+            };
+
+            noBtn.addEventListener('click', moveAction);
+            noBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // Stop default click emulation to make it instant
+                handleNo();
+            });
+
+            optEl.appendChild(noBtn);
+        }
+
+        // Dynamic Scaling for Mobile
+        function scaleCard() {
+            const width = window.innerWidth;
+            const card = document.querySelector('.card');
+
+            // Base width of the card design is ~580px
+            // If screen is smaller, scale down. 
+            // We leave some margin (e.g. 20px on each side -> width - 40)
+            if (width < 600) {
+                const scale = (width - 40) / 580;
+                // Clamp scale to be safe and not too small
+                const safeScale = Math.max(scale, 0.5);
+                card.style.transform = `translate(-50%, -50%) scale(${safeScale})`;
+            } else {
+                card.style.transform = 'translate(-50%, -50%) scale(1)';
+            }
+        }
+
+        window.addEventListener('resize', scaleCard);
+        // Call immediately
+        scaleCard();
+
+        let lastPosIndex = -1;
+
+        function handleNo() {
+            const noBtn = document.getElementById('noBtn');
+
+            // 1. Cycle Text
+            const messages = config.noButtonMessages || ["Are you sure?"];
+            const nextIndex = noClickCount % messages.length;
+            noBtn.innerText = messages[nextIndex];
+            noClickCount++;
+
+            // 2. Make it moving & Reparent to Body
+            if (noBtn.parentNode !== document.body) {
+                const rect = noBtn.getBoundingClientRect();
+                document.body.appendChild(noBtn);
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = rect.left + 'px';
+                noBtn.style.top = rect.top + 'px';
+                noBtn.classList.add('moving');
+            }
+
+            // --- Viewport-Safe Random Positions ---
+            // Calculate safe area (10% padding from edges)
+            const safeW = window.innerWidth - 100; // minus button approx width
+            const safeH = window.innerHeight - 60; // minus button approx height
+
+            const randomX = Math.max(20, Math.random() * safeW);
+            const randomY = Math.max(20, Math.random() * safeH);
+
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+
+            // 3. PREMIUM THEME SYSTEM (Random)
+            // ... existing theme logic ...
+
+
+            // Debug logging to track positions
+            console.log(`🎯 No button moved to: top=${pos.top}, left=${pos.left}, index=${newIndex}, screen=${isMobile ? 'mobile' : 'desktop'}`);
+
+            // --- 3. PREMIUM THEME SYSTEM ---
+            const themes = [
+                {
+                    bg: "linear-gradient(135deg, #1a0510 0%, #4a001a 100%)", // Deep Rose
+                    card: "rgba(255, 255, 255, 0.08)",
+                    btn: "linear-gradient(135deg, #ff6b9d, #f5576c)",
+                    shadow: "rgba(245, 87, 108, 0.4)"
+                },
+                {
+                    bg: "linear-gradient(135deg, #1b0024 0%, #3e0052 100%)", // royal velvet
+                    card: "rgba(255, 255, 255, 0.05)",
+                    btn: "linear-gradient(135deg, #a18cd1, #fbc2eb)",
+                    shadow: "rgba(161, 140, 209, 0.3)"
+                },
+                {
+                    bg: "linear-gradient(135deg, #4a0000 0%, #1a0000 100%)", // noir red
+                    card: "rgba(255, 255, 255, 0.1)",
+                    btn: "linear-gradient(135deg, #ff0844, #ffb199)",
+                    shadow: "rgba(255, 8, 68, 0.4)"
+                },
+                {
+                    bg: "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)", // Twilight Romance
+                    card: "rgba(255, 255, 255, 0.05)",
+                    btn: "linear-gradient(135deg, #00c6ff, #0072ff)",
+                    shadow: "rgba(0, 114, 255, 0.4)",
+                    darkText: false
+                }
+            ];
+
+            const theme = themes[Math.floor(Math.random() * themes.length)];
+
+            // Apply Theme with transitions
+            document.body.style.background = theme.bg;
+            card.style.background = theme.card;
+            noBtn.style.background = theme.btn;
+            noBtn.style.boxShadow = `0 10px 25px ${theme.shadow}`;
+
+            const titleTextSpan = document.querySelector('.title-text');
+            const heartIcons = document.querySelectorAll('.heart-icon');
+
+            if (theme.darkText) {
+                card.style.color = "#2d0a1e";
+                if (titleTextSpan) {
+                    titleTextSpan.style.background = "none";
+                    titleTextSpan.style.webkitTextFillColor = "#2d0a1e";
+                    titleTextSpan.style.color = "#2d0a1e";
+                }
+            } else {
+                card.style.color = "white";
+                if (titleTextSpan) {
+                    titleTextSpan.style.background = "linear-gradient(135deg, #fff, #ffb3d1)";
+                    titleTextSpan.style.webkitBackgroundClip = "text";
+                    titleTextSpan.style.backgroundClip = "text";
+                    titleTextSpan.style.color = "transparent";
+                    titleTextSpan.style.webkitTextFillColor = "transparent";
+                }
+            }
+        }
+
+        function handleYes() {
+            const noBtn = document.getElementById('noBtn');
+            if (noBtn) noBtn.style.display = 'none';
+
+            titleEl.textContent = "Yay! 🥰";
+            textEl.textContent = "I knew you would say yes! ❤️";
+            optEl.innerHTML = ''; // Clear buttons
+
+            startConfetti();
+        }
+
+        // --- Confetti ---
+        const canvas = document.getElementById('confetti');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function startConfetti() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            for (let i = 0; i < 150; i++) {
+                particles.push({
+                    x: window.innerWidth / 2,
+                    y: window.innerHeight / 2,
+                    dx: (Math.random() - 0.5) * 20,
+                    dy: (Math.random() - 0.5) * 20,
+                    size: Math.random() * 10 + 5,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    life: 200,
+                    gravity: 0.1
+                });
+            }
+            animate();
+        }
+
+        function animate() {
+            if (!particles.length) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.x += p.dx;
+                p.y += p.dy;
+                p.dy += p.gravity;
+                p.life--;
+
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.size, p.size);
+
+                if (p.life <= 0) particles.splice(i, 1);
+            });
+            requestAnimationFrame(animate);
+        }
+
+        // Initialize
+        loadConfig();
+
+    </script>
+</body>
+
+</html>

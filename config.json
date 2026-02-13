@@ -1,0 +1,15 @@
+{
+    "name": "My Love",
+    "loveEmoji": "💖",
+    "headerText": "💖 Kuchku 💖",
+    "mainQuestion": "Will you be my Valentine?",
+    "yesButton": "Yes! 💖",
+    "noButton": "No 🙅‍♀️",
+    "noButtonMessages": [
+        "Are you sure?",
+        "Really sure?",
+        "Think again!",
+        "Last chance!",
+        "Is that your final answer?"
+    ]
+}
