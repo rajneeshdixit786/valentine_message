@@ -600,12 +600,14 @@
 
             // --- Dynamic URL Parameters Override ---
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('name')) {
-                config.name = urlParams.get('name');
+            if (urlParams.has('Name')) {
+                let name = urlParams.get('Name');
+                // Capitalize first letter
+                config.name = name.charAt(0).toUpperCase() + name.slice(1);
             }
             // Allow other overrides if needed
-            if (urlParams.has('question')) {
-                config.mainQuestion = urlParams.get('question');
+            if (urlParams.has('Question')) {
+                config.mainQuestion = urlParams.get('Question');
             }
 
             // Always update card immediately
@@ -613,9 +615,12 @@
         }
 
         function updateCard() {
-            // Clean up any roaming noBtn
+            // Clean up any roaming buttons
             const existingNoBtn = document.getElementById('noBtn');
             if (existingNoBtn) existingNoBtn.remove();
+
+            const existingYesBtn = document.getElementById('yesBtn');
+            if (existingYesBtn) existingYesBtn.remove();
 
             // Render structured title with hearts and text separated
             const emoji = config.loveEmoji || '💖';
@@ -688,6 +693,35 @@
 
         let lastPosIndex = -1;
         let lastThemeIndex = -1;
+        let lastButtonPosition = null; // Track last button position to avoid overlap
+
+        function getRandomPosition() {
+            const safeW = window.innerWidth - 100;
+            const safeH = window.innerHeight - 60;
+
+            let randomX, randomY;
+            let attempts = 0;
+            const minDistance = 150; // Minimum distance between buttons
+
+            do {
+                randomX = Math.max(20, Math.random() * safeW);
+                randomY = Math.max(20, Math.random() * safeH);
+                attempts++;
+
+                // If no last position or far enough away, use this position
+                if (!lastButtonPosition || attempts > 10) break;
+
+                const distance = Math.sqrt(
+                    Math.pow(randomX - lastButtonPosition.x, 2) +
+                    Math.pow(randomY - lastButtonPosition.y, 2)
+                );
+
+                if (distance >= minDistance) break;
+            } while (attempts < 10);
+
+            lastButtonPosition = { x: randomX, y: randomY };
+            return { x: randomX, y: randomY };
+        }
 
         function handleNo() {
             const noBtn = document.getElementById('noBtn');
@@ -717,16 +751,10 @@
                 noBtn.classList.add('moving');
             }
 
-            // --- Viewport-Safe Random Positions ---
-            // Calculate safe area (10% padding from edges)
-            const safeW = window.innerWidth - 100; // minus button approx width
-            const safeH = window.innerHeight - 60; // minus button approx height
-
-            const randomX = Math.max(20, Math.random() * safeW);
-            const randomY = Math.max(20, Math.random() * safeH);
-
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
+            // --- Use shared position function ---
+            const pos = getRandomPosition();
+            noBtn.style.left = pos.x + 'px';
+            noBtn.style.top = pos.y + 'px';
 
 
             // --- 3. PREMIUM THEME SYSTEM ---
@@ -830,15 +858,10 @@
                 yesBtn.classList.add('moving');
             }
 
-            // --- Viewport-Safe Random Positions ---
-            const safeW = window.innerWidth - 100;
-            const safeH = window.innerHeight - 60;
-
-            const randomX = Math.max(20, Math.random() * safeW);
-            const randomY = Math.max(20, Math.random() * safeH);
-
-            yesBtn.style.left = randomX + 'px';
-            yesBtn.style.top = randomY + 'px';
+            // --- Use shared position function ---
+            const pos = getRandomPosition();
+            yesBtn.style.left = pos.x + 'px';
+            yesBtn.style.top = pos.y + 'px';
 
             // --- Apply same theme system as No button ---
             const themes = [
