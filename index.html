@@ -695,8 +695,9 @@
         let lastButtonPosition = null; // Track last button position to avoid overlap
 
         function getRandomPosition() {
-            const safeW = window.innerWidth - 100;
-            const safeH = window.innerHeight - 60;
+            // Reduce horizontal movement, keep vertical movement same
+            const safeW = window.innerWidth - 200; // Increased margin to reduce left/right movement
+            const safeH = window.innerHeight - 60;  // Keep vertical movement same
 
             let randomX, randomY;
             let attempts = 0;
